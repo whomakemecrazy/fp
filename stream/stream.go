@@ -1,16 +1,39 @@
 package stream
 
+import (
+	"github.com/whomakemecrazy/fp/common"
+)
+
 type Stream[T any] struct {
 	data []T
 	err  error
 }
 
-func (s Stream[T]) Contains() Stream[T] {
-	return s
+func Just[T any](args []T, e error) Stream[T] {
+	return Stream[T]{
+		data: args,
+		err:  e,
+	}
 }
-func (s Stream[T]) Filter() Stream[T] {
-	return s
+
+func (s Stream[T]) Contains(value T) bool {
+	for _, v := range s.data {
+		if common.Equal(v, value) {
+			return true
+		}
+	}
+	return false
 }
+func (s Stream[T]) Filter(fn func(T) bool) Stream[T] {
+	result := make([]T, 0, len(s.data))
+	for _, v := range s.data {
+		if fn(v) {
+			result = append(result, v)
+		}
+	}
+	return Just(result, nil)
+}
+
 func (s Stream[T]) Distinct() Stream[T] {
 	return s
 }

@@ -113,3 +113,12 @@ func Kind(obj interface{}) reflect.Kind {
 // func Max[T any](m ...MaxType[T]) T {
 
 // }
+func Equal(v1, v2 interface{}) bool {
+	if !reflect.TypeOf(v1).Comparable() {
+		return false
+	}
+	if !reflect.TypeOf(v2).Comparable() {
+		return false
+	}
+	return v1 == v2
+}
